@@ -1,4 +1,3 @@
-const e = require('express');
 const express = require('express');
 const app = express();
 const PORT = 3000;
@@ -15,6 +14,7 @@ const employees = [
 ]
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
+//Read
 app.get("/employees", (req, res) => {
     res.json(employees);
 });
@@ -30,6 +30,7 @@ app.get("/employees/:id", (req, res) => {
 
 });
 
+//CREATE
 app.post("/employees", (req, res) => {
     const employee = req.body;
     employees.push({ id: employees.length + 1, ...employee });
