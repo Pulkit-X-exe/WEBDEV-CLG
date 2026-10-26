@@ -55,6 +55,9 @@ db.doctors.aggregate(
         },
         {
             $sort: { averageExperience: -1 }
+        },
+        {
+            $count: 'fees'
         }
     ]
 )
