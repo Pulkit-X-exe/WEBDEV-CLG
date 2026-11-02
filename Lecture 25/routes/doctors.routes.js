@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Doctor = require('../models/doctors1.model');
+const Doctor = require('../models/doctors.model');
 const { getDoctor, getDoctorById, createDoctor, updateDoctor, deleteDoctor } = require('../controller/doctors.controller');
 
 router.get('/api/doctors',getDoctor)

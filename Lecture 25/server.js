@@ -1,18 +1,16 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const app = express()
 const port = 3000;
 const doctorsRoutes = require('./routes/doctors.routes')
+const connectDB = require('./config/db.js')
 
 app.use(express.json())
 app.use('/',doctorsRoutes)
 
 
-mongoose.connect('mongodb://localhost:27017/HospitalDB').then(()=>{
-    console.log('Dataabse connected');
-}).catch((err)=>{
-    console.log(err) 
-})
+
+connectDB();
+
 app.listen(port,()=>{
     console.log(`server is running on http://localhost:${port}`)
 })  
