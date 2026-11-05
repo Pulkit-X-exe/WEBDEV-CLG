@@ -1,6 +1,6 @@
 use("HospitalDB")
 
-// db.doctors.insertMany([
+// db.doctors1.insertMany([
 //     {
 //         name: "Dr. Punit",
 //         specialty: "Cardiology",
@@ -17,7 +17,7 @@ use("HospitalDB")
 //         yearsOfExperience: 10,
 //         available: true,
 //         fees: 1500,
-   //         salary: 400000,
+//            salary: 400000,
 //         patients: ["Alice Brown", "Bob Green"],
 //         contact: { phone: "098-765-4321", email: "dr.mansi@hospital.com" }
 //     },
@@ -33,10 +33,10 @@ use("HospitalDB")
 //     }
 // ])
 
-db.doctors.aggregate(
+db.doctors1.aggregate(
     [
         {
-            $match: { specialty: "Cardiology" }
+            $match: { specialty: "Dermatology" }
         },
         {
             $project: {
@@ -45,20 +45,20 @@ db.doctors.aggregate(
                 yearsOfExperience: 1,
             }
         },
-        {
-            $group: {
-                _id: "$specialty",
-                totalDoctors: { $sum: 1 },
-                averageExperience: { $avg: "$yearsOfExperience" },
+        // {
+        //     $group: {
+        //         _id: "$specialty",
+        //         // totaldoctors1: { $sum: 1 },
+        //         averageExperience: { $avg: "$yearsOfExperience" },
 
-            }
-        },
-        {
-            $sort: { averageExperience: -1 }
-        },
-        {
-            $count: 'fees'
-        }
+        //     }
+        // },
+        // {
+        //     $sort: { averageExperience: -1 }
+        // },
+        // {
+        //     $count: 'fees'
+        // }
     ]
 )
 
