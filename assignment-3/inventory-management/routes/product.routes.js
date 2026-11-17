@@ -3,11 +3,15 @@ const router = express.Router();
 
 const {
     createProduct,
-    getAllProducts
+    getAllProducts,
+    getLowStockProducts,
+    getCategorySummary
 } = require("../controllers/product.controller");
 
 // Product Routes
 router.post("/", createProduct);
 router.get("/", getAllProducts);
+router.get("/low-stock", getLowStockProducts);
+router.get("/summary", getCategorySummary);
 
 module.exports = router;

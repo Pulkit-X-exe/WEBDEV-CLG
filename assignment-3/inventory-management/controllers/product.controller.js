@@ -15,7 +15,6 @@ const getAllProducts = async (req, res, next) => {
     try {
         const { category, search, name, sortBy, order, sort } = req.query;
 
-        // Build query object
         let query = {};
 
         // Filter by category
@@ -23,7 +22,7 @@ const getAllProducts = async (req, res, next) => {
             query.category = category;
         }
 
-        // Search by name (case-insensitive)
+        // Search by name
         if (search) {
             query.name = { $regex: search, $options: "i" };
         } else if (name) {
@@ -63,7 +62,49 @@ const getAllProducts = async (req, res, next) => {
     }
 };
 
+// Low Stock Alert Report (quantity <= reorderLevel)
+const getLowStockProducts = async (req, res, next) => {
+    try {
+        const lowStockItems = await Product.find({
+            $expr: { $lte: ["$quantity", "$reorderLevel"] }
+        });
+
+        res.status(200).json({
+            count: lowStockItems.length,
+            lowStockItems: lowStockItems
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Category-wise Inventory Summary using Aggregation Pipeline
+const getCategorySummary = async (req, res, next) => {
+    try {
+        const summary = await Product.aggregate([
+            {
+                $group: {
+                    _id: "$category",
+                    totalItems: { $sum: 1 },
+                    totalQuantity: { $sum: "$quantity" },
+                    totalStockValue: { $sum: { $multiply: ["$price", "$quantity"] } },
+                    avgPrice: { $avg: "$price" }
+                }
+            }
+        ]);
+
+        res.status(200).json({
+            categories: summary.length,
+            summary: summary
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     createProduct,
-    getAllProducts
+    getAllProducts,
+    getLowStockProducts,
+    getCategorySummary
 };
