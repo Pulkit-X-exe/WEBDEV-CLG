@@ -1,24 +1,15 @@
+const Product = require("../models/Product");
 
-const Product = require("../models/project.models.js");
-
-// CREATE PRODUCT
-const createProduct = async (req, res) => {
+// Create a new product
+const createProduct = async (req, res, next) => {
     try {
-
         const product = await Product.create(req.body);
-
-        res.status(201).json({
-            message: "Product created successfully",
-            product: product
-        });
-
+        res.status(201).json(product);
     } catch (error) {
-
-        res.status(400).json({
-            message: error.message
-        });
-
+        next(error);
     }
 };
 
-module.exports = { createProduct };
+module.exports = {
+    createProduct
+};

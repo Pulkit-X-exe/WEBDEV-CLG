@@ -1,10 +1,9 @@
 const express = require("express");
-
 const router = express.Router();
 
 const { createProduct } = require("../controllers/product.controller");
 
-// POST - Create Product
+// Create Product API
 router.post("/", createProduct);
 
 module.exports = router;
