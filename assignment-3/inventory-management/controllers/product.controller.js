@@ -119,10 +119,70 @@ const getProductById = async (req, res, next) => {
     }
 };
 
+// Update Product Details
+const updateProduct = async (req, res, next) => {
+    try {
+        const product = await Product.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true, runValidators: true }
+        );
+
+        if (!product) {
+            return res.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        res.status(200).json(product);
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Stock Adjustment (restock or sale)
+const adjustStock = async (req, res, next) => {
+    try {
+        const { change } = req.body;
+
+        if (change === undefined || typeof change !== "number") {
+            return res.status(400).json({
+                message: "Please provide a valid numeric change value"
+            });
+        }
+
+        const product = await Product.findById(req.params.id);
+
+        if (!product) {
+            return res.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        if (product.quantity + change < 0) {
+            return res.status(400).json({
+                message: "Insufficient stock. Quantity cannot be negative."
+            });
+        }
+
+        product.quantity += change;
+        await product.save();
+
+        res.status(200).json({
+            message: "Stock updated",
+            product: product
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     createProduct,
     getAllProducts,
     getLowStockProducts,
     getCategorySummary,
-    getProductById
+    getProductById,
+    updateProduct,
+    adjustStock
 };
