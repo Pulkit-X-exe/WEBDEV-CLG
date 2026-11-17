@@ -177,6 +177,26 @@ const adjustStock = async (req, res, next) => {
     }
 };
 
+// Delete a product by ID
+const deleteProduct = async (req, res, next) => {
+    try {
+        const product = await Product.findByIdAndDelete(req.params.id);
+
+        if (!product) {
+            return res.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        res.status(200).json({
+            message: "Product deleted",
+            id: req.params.id
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     createProduct,
     getAllProducts,
@@ -184,5 +204,6 @@ module.exports = {
     getCategorySummary,
     getProductById,
     updateProduct,
-    adjustStock
+    adjustStock,
+    deleteProduct
 };

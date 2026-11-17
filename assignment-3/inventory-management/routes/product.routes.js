@@ -8,7 +8,8 @@ const {
     getCategorySummary,
     getProductById,
     updateProduct,
-    adjustStock
+    adjustStock,
+    deleteProduct
 } = require("../controllers/product.controller");
 
 // Product Routes
@@ -19,5 +20,6 @@ router.get("/summary", getCategorySummary);
 router.get("/:id", getProductById);
 router.put("/:id", updateProduct);
 router.patch("/:id/stock", adjustStock);
+router.delete("/:id", deleteProduct);
 
 module.exports = router;
